@@ -1,17 +1,5 @@
-# # loading data
-# import tensorflow as tf
-# from tensorflow.keras import layers
-#
-# model = tf.keras.Sequential()
-# # Dense defines fully connected layers
-# # Adds a densely-connected layer with 64 units to the model:
-# model.add(layers.Dense(64, activation='relu'))
-# # Add another:
-# model.add(layers.Dense(64, activation='relu'))
-# # Add a softmax layer with 10 output units:
-# model.add(layers.Dense(10, activation='softmax'))
-
-
+import tensorflow as tf
+from tensorflow.keras import layers
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy
@@ -24,13 +12,13 @@ Y = dataset[:,8]
 # ------
 
 # create model
-model = Sequential()
+model = tf.keras.Sequential()
 # first layer has 12 neurons and input_dim is how many inputs in first layer. relu is the activation function on the first two layers and the sigmoid function in the output layer
-model.add(Dense(12, input_dim=8, activation='relu'))
+model.add(layers.Dense(12, input_dim=8, activation='relu'))
 # second hidden layer had 8 neurons
-model.add(Dense(8, activation='relu'))
+model.add(layers.Dense(8, activation='relu'))
 # ouput layer has 1 neuron to predict class (onset of diabetes or not)
-model.add(Dense(1, activation='sigmoid'))
+model.add(layers.Dense(1, activation='sigmoid'))
 
 # -----
 
