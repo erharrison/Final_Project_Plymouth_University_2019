@@ -7,18 +7,18 @@ numpy.random.seed(0)
 
 
 dataset = numpy.loadtxt(r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv", delimiter=",")
-inputX = dataset[:]
-outputY = dataset[:]
+inputX = dataset[:,0:78]
+outputY = dataset[:128]
 
 
 # Sequential model is a linear stack of layers
 model = tf.keras.Sequential()
 # 77 features/columns
-model.add(layers.Dense(100, input_dim=77, activation='relu'))
+model.add(layers.Dense(77, input_dim=77, activation='relu'))
 # second hidden layer had 8 neurons
-model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(77, activation='relu'))
 # ouput layer has 1 neuron to predict class (onset of diabetes or not)
-model.add(layers.Dense(3 , activation='sigmoid'))
+model.add(layers.Dense(77 , activation='sigmoid'))
 
 
 # Compile model
