@@ -1,35 +1,40 @@
 import tensorflow as tf
 from tensorflow.keras import layers
-from keras.models import Sequential
-from keras.layers import Dense
 import numpy
 numpy.random.seed(0)
+import matplotlib.pyplot as plt
 
 
 dataset = numpy.loadtxt(r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv", delimiter=",")
-inputX = dataset[:,0:78]
-outputY = dataset[:128]
+inputX, outputY = dataset[:,0:78], dataset[:128]
 
 
 # Sequential model is a linear stack of layers
 model = tf.keras.Sequential()
 # 77 features/columns
 model.add(layers.Dense(77, input_dim=77, activation='relu'))
-# second hidden layer had 8 neurons
-model.add(layers.Dense(77, activation='relu'))
-# ouput layer has 1 neuron to predict class (onset of diabetes or not)
-model.add(layers.Dense(77 , activation='sigmoid'))
+
+model.add(layers.Dense(15, activation='relu'))
+
+model.add(layers.Dense(77 , activation='relu'))
 
 
 # Compile model
-# binary_crossentropy is logarithmic loss
+# binary_crossentropy or categorical_crossentropy
+# categorical or binary_accuracy
 # adam is efficient gradient descent algorithm
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['categorical_accuracy', 'mse', 'mae', 'mape', 'cosine'])
 
 
 # Fit the model
 # epochs is number of iterations through the dataset
-model.fit(inputX, outputY, epochs=150, batch_size=10)
+history = model.fit(inputX, outputY, epochs=150, batch_size=len(inputX), verbose=2)
+
+plt.plot(history.history['mean_squared_error'])
+plt.plot(history.history['mean_absolute_error'])
+plt.plot(history.history['mean_absolute_percentage_error'])
+plt.plot(history.history['cosine_proximity'])
+plt.show()
 
 
 # calculate predictions
