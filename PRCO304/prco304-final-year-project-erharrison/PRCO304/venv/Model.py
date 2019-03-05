@@ -6,21 +6,21 @@ import numpy
 import matplotlib.pyplot as plt
 
 seed = 10
-numpy.random.seed(seed) # for reproducibility
+numpy.random.seed(seed)  # for reproducibility
 
-scaler = StandardScaler() # scaling beacuse mlp is sensitive to feature scaling
+scaler = StandardScaler()  # scaling beacuse mlp is sensitive to feature scaling
 
 dataset = numpy.loadtxt(r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv", delimiter=",")
 inputX, outputY = dataset[:,0:78], dataset[:128]
 
-X_train, X_test, y_train, y_test = train_test_split(inputX, outputY)
+x_train, x_test, y_train, y_test = train_test_split(inputX, outputY)
 
-scaler.fit(X_train)
+scaler.fit(x_train)
 
 StandardScaler(copy=True, with_mean=True, with_std=True)
 
-X_train = scaler.transform(X_train)
-X_test = scaler.transform(X_test)
+X_train = scaler.transform(x_train)
+X_test = scaler.transform(x_test)
 
 y_train = scaler.transform(y_train)
 y_test = scaler.transform(y_test)
@@ -35,7 +35,6 @@ model.add(layers.Dense(15, activation='sigmoid'))
 
 model.add(layers.Dense(77, activation='sigmoid'))
 
-#TODO train and test
 
 # Compile model
 # binary_crossentropy or categorical_crossentropy
@@ -56,19 +55,21 @@ model.compile(loss='binary_crossentropy',   # crossentropy measures the divergen
 # epochs is number of iterations through the training set
 # batch size is number of training instances observed before the optimizer performs a
 # weight update
-modelFit = model.fit(X_train, y_train, epochs=150, batch_size=len(X_train), verbose=1)
+modelFit = model.fit(x_train, y_train, epochs=200, batch_size=len(x_train), verbose=1)
 
 
-#TODO need to use weights, bias input somehow in prediction
+#TODO need to use weights, bias input somehow in prediction?
 
 # calculate predictions
-predictions = model.predict(X_train)
+predictions = model.predict(x_train)
 # round predictions
 rounded = [round(x[0]) for x in predictions]
 print(rounded)
 
 # plot metrics
-plt.plot(modelFit.history['mean_squared_error'])
-plt.plot(modelFit.history['mean_squared_logarithmic_error'])
-plt.plot(modelFit.history['mean_absolute_error'])
-plt.show()
+plt.figure()
+plt.plot((modelFit.history['mean_squared_error']), 'b', label='Mean Squared Error')
+plt.plot((modelFit.history['mean_squared_logarithmic_error']), 'r', label='Mean Squared Logarithmic Error')
+plt.plot((modelFit.history['mean_absolute_error']), 'y', label='Mean Absolute Error')
+plt.title('Regression Metrics')
+plt.legend()
