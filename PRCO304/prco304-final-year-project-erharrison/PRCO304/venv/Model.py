@@ -13,17 +13,17 @@ scaler = StandardScaler()  # scaling beacuse mlp is sensitive to feature scaling
 dataset = numpy.loadtxt(r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv", delimiter=",")
 inputX, outputY = dataset[:,0:78], dataset[:128]
 
-x_train, x_test, y_train, y_test = train_test_split(inputX, outputY)
+inputX_train, inputX_test, outputY_train, inputY_test = train_test_split(inputX, outputY)
 
-scaler.fit(x_train)
+scaler.fit(inputX_train)
 
 StandardScaler(copy=True, with_mean=True, with_std=True)
 
-X_train = scaler.transform(x_train)
-X_test = scaler.transform(x_test)
+inputX_train = scaler.transform(inputX_train)
+inputX_test = scaler.transform(inputX_test)
 
-y_train = scaler.transform(y_train)
-y_test = scaler.transform(y_test)
+outputY_train = scaler.transform(outputY_train)
+inputY_test = scaler.transform(inputY_test)
 
 # Sequential model is a linear stack of layers
 model = tf.keras.Sequential()
@@ -55,13 +55,13 @@ model.compile(loss='binary_crossentropy',   # crossentropy measures the divergen
 # epochs is number of iterations through the training set
 # batch size is number of training instances observed before the optimizer performs a
 # weight update
-modelFit = model.fit(x_train, y_train, epochs=200, batch_size=len(x_train), verbose=1)
+modelFit = model.fit(inputX_train, outputY_train, epochs=200, batch_size=len(inputX_train), verbose=1)
 
 
 #TODO need to use weights, bias input somehow in prediction?
 
 # calculate predictions
-predictions = model.predict(x_train)
+predictions = model.predict(inputX_train)
 # round predictions
 rounded = [round(x[0]) for x in predictions]
 print(rounded)
