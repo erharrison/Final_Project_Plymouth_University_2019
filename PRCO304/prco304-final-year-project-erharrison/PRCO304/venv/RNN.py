@@ -1,5 +1,3 @@
-# TODO complete exception report
-
 import pandas
 import keras
 import matplotlib
@@ -47,7 +45,7 @@ testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 # create RNN model
 # Sequential model is a linear stack of layers
 model = Sequential()
-model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+model.add(keras.layers.LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
 
 model.compile(loss='mean_squared_error',
@@ -69,8 +67,8 @@ model.fit(testX, testY, epochs=1000, batch_size=len(testX), verbose=2, callbacks
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
 
-print(trainPredict)
-print(testPredict)
+print(trainPredict.shape)
+print(testPredict.shape)
 
 
 def heatmap(data, row_labels, col_labels, ax=None,
@@ -105,7 +103,7 @@ def heatmap(data, row_labels, col_labels, ax=None,
     cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
 
     # We want to show all ticks...
-    ax.set_xticks(numpy.arange(data.shape[100]))
+    ax.set_xticks(numpy.arange(data.shape[1]))
     ax.set_yticks(numpy.arange(data.shape[0]))
     # ... and label them with the respective list entries.
     ax.set_xticklabels(col_labels)
@@ -132,7 +130,7 @@ def heatmap(data, row_labels, col_labels, ax=None,
 
 
 def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
-                     textcolors=["black", "white"],
+                     textcolors=["green", "white"],
                      threshold=None, **textkw):
     """
     A function to annotate a heatmap.
@@ -186,8 +184,9 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
 
 fig, ax = plt.subplots()
 
-im, cbar = heatmap(dataset, 'time', 'no. of samples', ax=ax,
-                   cmap="YlGn", cbarlabel="infected samples [t/year]")
+
+im, cbar = heatmap(trainPredict, len(trainPredict), 'len(trainPredict[0])', ax=ax,
+                   cmap="YlGn", cbarlabel=" no. of infected samples")
 texts = annotate_heatmap(im, valfmt="{x:.1f} t")
 
 fig.tight_layout()
