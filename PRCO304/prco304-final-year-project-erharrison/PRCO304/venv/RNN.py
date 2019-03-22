@@ -2,13 +2,13 @@ import pandas
 import keras
 import matplotlib
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Flatten
+from keras.layers import Dense, LSTM, Flatten, LSTMCell
 from sklearn.preprocessing import MinMaxScaler
 import numpy
 import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import TensorBoard
 import time
-
+from tensorflow.python.ops import rnn, rnn_cell
 
 # fix random seed for reproducibility
 seed = 7
@@ -37,16 +37,21 @@ trainX, trainY = train[1:-1, :], train[2:, :]
 testX, testY = test[1:-1, :], test[2:, :]
 
 # (batch_size, timesteps, features)
-trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
-trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
-testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
-testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
+# trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
+# trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
+# testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
+# testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
+
+lstm_cell = rnn_cell.BasicLSTMCell(rnn_size,state_is_tuple=True)
 
 # create RNN model
 # Sequential model is a linear stack of layers
 model = Sequential()
-model.add(keras.layers.LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-model.add(Dense(77, activation='relu'))
+model.add(keras.layers.RNN(LSTMCell(77).state_size(call=testX, state_is_tuple=True), activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+model.add()
+#  model.add(keras.layers.LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+#  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+#  model.add(Dense(77, activation='relu'))
 
 model.compile(loss='mean_squared_error',
               optimizer='adam',
