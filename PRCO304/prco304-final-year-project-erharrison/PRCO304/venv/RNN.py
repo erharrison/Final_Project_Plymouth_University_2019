@@ -10,6 +10,7 @@ import time
 
 from Cell import MinimalRNNCell
 
+cell = MinimalRNNCell(77)
 # fix random seed for reproducibility
 seed = 7
 numpy.random.seed(seed)
@@ -23,7 +24,6 @@ dataset = dataframe.values
 # floating point values are more suitable for neural networks
 dataset = dataset.astype('float32')
 
-
 scaler = MinMaxScaler(feature_range=(0, 1))  # MinMaxScalar is from scikit learn library
 dataset = scaler.fit_transform(dataset)
 
@@ -33,8 +33,8 @@ test_size = int(len(dataset) * 0.2)  # 20%
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 print(len(train), len(test))
 
-trainX, trainY = train[1:-1, :], train[2:, :]
-testX, testY = test[1:-1, :], test[2:, :]
+trainX, trainY = train[1:-1, :], train[2:, :] # shape is 82
+testX, testY = test[1:-1, :], test[2:, :] # shape is 20 - could be causing error when fitting?
 
 # (batch_size, timesteps, features)
 trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
@@ -42,14 +42,12 @@ trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 
-cell = MinimalRNNCell(32)
-x = keras.Input((None, 5))
 
 # create RNN model
 # Sequential model is a linear stack of layers
 model = Sequential()
-model.add(keras.layers.RNN(cell, return_sequences=True))
 model.add(Activation('relu'))
+model.add(keras.layers.RNN(cell, return_sequences=True))
 # model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 # model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
@@ -65,9 +63,10 @@ name = "recurrent-neural-network-{}".format(int(time.time()))
 
 tensorboard = TensorBoard(log_dir='TensorBoardResults/logs/{}'.format(name), histogram_freq=0,
                           write_graph=True)
+# callbacks=[tensorboard]
 
-model.fit(trainX, trainY, epochs=300, batch_size=len(trainX), verbose=1, callbacks=[tensorboard])
-model.fit(testX, testY, epochs=300, batch_size=len(testX), verbose=1, callbacks=[tensorboard])
+model.fit(trainX, trainY, epochs=300, batch_size=len(trainX), verbose=1)
+model.fit(testX, testY, epochs=300, batch_size=len(testX), verbose=1)
 
 # make predictions
 trainPredict = model.predict(trainX)

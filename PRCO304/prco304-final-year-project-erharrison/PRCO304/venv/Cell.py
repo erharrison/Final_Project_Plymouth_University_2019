@@ -1,4 +1,5 @@
 import keras
+import numpy
 
 
 class MinimalRNNCell(keras.layers.Layer):
@@ -20,6 +21,6 @@ class MinimalRNNCell(keras.layers.Layer):
 
     def call(self, inputs, states):
         prev_output = states[0]
-        h = keras.layers.Dot(inputs, self.kernel)
-        output = h + keras.layers.dot(prev_output, self.recurrent_kernel, axes=1)
+        h = numpy.dot(inputs, self.kernel)
+        output = h + numpy.dot(prev_output, self.recurrent_kernel)
         return output, [output]
