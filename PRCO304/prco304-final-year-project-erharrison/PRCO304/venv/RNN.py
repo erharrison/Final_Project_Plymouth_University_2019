@@ -10,7 +10,8 @@ import time
 
 from Cell import MinimalRNNCell
 
-cell = MinimalRNNCell(77)
+
+
 # fix random seed for reproducibility
 seed = 7
 numpy.random.seed(seed)
@@ -41,6 +42,10 @@ trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
+print(trainX.shape, testX.shape)
+
+
+cell = MinimalRNNCell(82)
 
 
 # create RNN model
