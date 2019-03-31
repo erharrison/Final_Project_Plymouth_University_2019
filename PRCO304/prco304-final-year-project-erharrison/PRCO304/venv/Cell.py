@@ -19,7 +19,7 @@ class MinimalRNNCell(keras.layers.Layer):
             name='recurrent_kernel')
         self.built = True
 
-    def call(self, inputs, states):
+    def call(self, inputs, states): # call makes the forward pass
         prev_output = states[0]
         h = numpy.dot(inputs, self.kernel)
         output = h + numpy.dot(prev_output, self.recurrent_kernel)

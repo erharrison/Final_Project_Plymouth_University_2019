@@ -52,9 +52,9 @@ cell = MinimalRNNCell(77)
 # Sequential model is a linear stack of layers
 model = Sequential()
 #  model.add(Activation('relu'))
-#  model.add(keras.layers.RNN(cell, return_sequences=True))
-model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-# model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+model.add(keras.layers.RNN(cell, return_sequences=True))
+#  model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+#  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
 
 model.compile(loss='mean_squared_error',
