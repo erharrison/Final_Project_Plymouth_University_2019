@@ -45,18 +45,17 @@ testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 print(trainX.shape, testX.shape)
 
 
-cell = MinimalRNNCell(82)
+cell = MinimalRNNCell(77)
 
 
 # create RNN model
 # Sequential model is a linear stack of layers
 model = Sequential()
-model.add(Activation('relu'))
+#  model.add(Activation('relu'))
 model.add(keras.layers.RNN(cell, return_sequences=True))
 # model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 # model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
-
 
 model.compile(loss='mean_squared_error',
               optimizer='adam',
