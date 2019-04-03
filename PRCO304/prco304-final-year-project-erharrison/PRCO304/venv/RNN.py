@@ -1,3 +1,4 @@
+from idlelib import history
 import pandas
 import keras
 from keras.models import Sequential
@@ -7,6 +8,7 @@ import numpy
 import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import TensorBoard
 import time
+from keras.utils.vis_utils import plot_model
 
 from Cell import MinimalRNNCell
 
@@ -37,7 +39,7 @@ trainX, trainY = train[1:-1, :], train[2:, :] # shape is 82
 testX, testY = test[1:-1, :], test[2:, :] # shape is 20 - could be causing error when fitting?
 
 # (batch_size, timesteps, features)
-trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
+trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])  # trainX use fisrt row and see how that goes then use 20 rows etc.
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
@@ -50,8 +52,8 @@ cell = MinimalRNNCell(77)
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(Activation('relu'))
-model.add(RNN(cell, return_sequences=True))
-#  model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+#  model.add(RNN(cell, return_sequences=True))
+model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 #  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
 
@@ -70,7 +72,7 @@ tensorboard = TensorBoard(
 
 # callbacks=[tensorboard]
 
-model.fit(
+history = model.fit(
     trainX,
     trainY,
     epochs=300,
@@ -82,7 +84,7 @@ model.fit(
     testX,
     testY,
     epochs=300,
-    batch_size=len(testX),
+    batch_size=len(testX), #  hard code number
     verbose=1,
     callbacks=[tensorboard])
 
@@ -93,6 +95,21 @@ testPredict = model.predict(testX)
 print(trainPredict.shape)
 print(testPredict.shape)
 
-plt.imshow(trainPredict, interpolation='none')
-plt.colorbar()
-plt.show()
+print(model.summary())
+plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
+
+training_loss = history.history['loss']
+test_loss = history.history['loss']
+
+epoch_count = range(1, len(training_loss) + 1)
+
+plt.plot(epoch_count, training_loss, 'r--')
+plt.plot(epoch_count, test_loss, 'b-')
+plt.legend(['Training Loss', 'Test Loss'])
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show();
+
+# plt.imshow(trainPredict, interpolation='none')
+# plt.colorbar()
+# plt.show()
