@@ -55,6 +55,7 @@ model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(RNN(cell, return_sequences=True))
 model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 #  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+model.add(Dense(11, activation='relu'))
 model.add(Dense(77, activation='relu'))
 
 model.compile(loss='mean_squared_error',
@@ -72,18 +73,18 @@ tensorboard = TensorBoard(
 
 # callbacks=[tensorboard]
 
-history = model.fit(
+trainModelFit = model.fit(
     trainX,
     trainY,
-    epochs=300,
+    epochs=200,
     batch_size=len(trainX),  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
 
-model.fit(
+testModelFit = model.fit(
     testX,
     testY,
-    epochs=300,
+    epochs=200,
     batch_size=len(testX), #  hard code number
     verbose=1,
     callbacks=[tensorboard])
@@ -98,8 +99,8 @@ print(testPredict.shape)
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
 
-training_loss = history.history['loss']
-test_loss = history.history['loss']
+training_loss = trainModelFit.history['loss']
+test_loss = testModelFit.history['loss']
 
 epoch_count = range(1, len(training_loss) + 1)
 
