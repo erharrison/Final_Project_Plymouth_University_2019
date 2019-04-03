@@ -1,7 +1,7 @@
 import pandas
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Flatten, LSTMCell, Activation
+from keras.layers import Dense, LSTM, Flatten, LSTMCell, Activation, RNN
 from sklearn.preprocessing import MinMaxScaler
 import numpy
 import matplotlib.pyplot as plt
@@ -9,7 +9,6 @@ from tensorflow.keras.callbacks import TensorBoard
 import time
 
 from Cell import MinimalRNNCell
-
 
 
 # fix random seed for reproducibility
@@ -48,11 +47,10 @@ print(trainX.shape, testX.shape)
 cell = MinimalRNNCell(77)
 
 
-# create RNN model
-# Sequential model is a linear stack of layers
-model = Sequential()
+# create recurrent neural network
+model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(Activation('relu'))
-model.add(keras.layers.RNN(cell, return_sequences=True))
+model.add(RNN(cell, return_sequences=True))
 #  model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 #  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='relu'))
@@ -66,13 +64,27 @@ model.compile(loss='mean_squared_error',
 name = "recurrent-neural-network-{}".format(int(time.time()))
 
 tensorboard = TensorBoard(
-    log_dir=
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs/{}'.format(name), histogram_freq=0,
-                          write_graph=True)
+    log_dir= # path to where file gets saved
+        r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs/{}'.format(name), histogram_freq=0,
+    write_graph=True)
+
 # callbacks=[tensorboard]
 
-model.fit(trainX, trainY, epochs=300, batch_size=len(trainX), verbose=1, callbacks=[tensorboard])
-model.fit(testX, testY, epochs=300, batch_size=len(testX), verbose=1, callbacks=[tensorboard])
+model.fit(
+    trainX,
+    trainY,
+    epochs=300,
+    batch_size=len(trainX),  # Number of samples per gradient update.
+    verbose=1,
+    callbacks=[tensorboard])
+
+model.fit(
+    testX,
+    testY,
+    epochs=300,
+    batch_size=len(testX),
+    verbose=1,
+    callbacks=[tensorboard])
 
 # make predictions
 trainPredict = model.predict(trainX)
@@ -81,6 +93,6 @@ testPredict = model.predict(testX)
 print(trainPredict.shape)
 print(testPredict.shape)
 
-# plt.imshow(trainPredict, interpolation='none')
-# plt.colorbar()
-# plt.show()
+plt.imshow(trainPredict, interpolation='none')
+plt.colorbar()
+plt.show()
