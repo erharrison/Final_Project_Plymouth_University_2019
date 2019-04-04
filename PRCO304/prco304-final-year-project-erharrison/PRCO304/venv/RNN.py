@@ -1,4 +1,3 @@
-from idlelib import history
 import pandas
 import keras
 from keras.models import Sequential
@@ -14,7 +13,7 @@ from Cell import MinimalRNNCell
 
 
 # fix random seed for reproducibility
-seed = 7
+seed = 0
 numpy.random.seed(seed)
 
 dataframe = pandas.read_csv(
@@ -53,18 +52,18 @@ cell = MinimalRNNCell(77)
 model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(Activation('relu'))
 #  model.add(RNN(cell, return_sequences=True))
-model.add(keras.layers.SimpleRNN(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-#  model.add(LSTM(77, activation='relu', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-model.add(Dense(11, activation='relu'))
-model.add(Dense(77, activation='relu'))
+model.add(keras.layers.SimpleRNN(77, activation='tanh', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+#  model.add(LSTM(77, activation='sigmoid', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+# model.add(Dense(77, activation='tanh'))
 
 model.compile(loss='mean_squared_error',
               optimizer='adam',
-              metrics=['mean_squared_error',  # linear regression performance measure
+              metrics=['accuracy',
+                       'mean_squared_error',  # linear regression performance measure
                        'mean_squared_logarithmic_error',  # used to measure difference between actual and predicted
                        'mean_absolute_error'])  # measure how close predictions are to output])
 
-name = "recurrent-neural-network-{}".format(int(time.time()))
+name = "simple-recurrent-neural-network"  # .format(int(time.time()))
 
 tensorboard = TensorBoard(
     log_dir= # path to where file gets saved
@@ -76,7 +75,7 @@ tensorboard = TensorBoard(
 trainModelFit = model.fit(
     trainX,
     trainY,
-    epochs=200,
+    epochs=185,
     batch_size=len(trainX),  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
@@ -84,7 +83,7 @@ trainModelFit = model.fit(
 testModelFit = model.fit(
     testX,
     testY,
-    epochs=200,
+    epochs=185,
     batch_size=len(testX), #  hard code number
     verbose=1,
     callbacks=[tensorboard])
@@ -99,16 +98,29 @@ print(testPredict.shape)
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
 
-training_loss = trainModelFit.history['loss']
-test_loss = testModelFit.history['loss']
+trainingLoss = trainModelFit.history['loss']
+testLoss = testModelFit.history['loss']
 
-epoch_count = range(1, len(training_loss) + 1)
+trainingAccuracy = trainModelFit.history['acc']
+testAccuracy = testModelFit.history['acc']
 
-plt.plot(epoch_count, training_loss, 'r--')
-plt.plot(epoch_count, test_loss, 'b-')
+epochCountLoss = range(1, len(trainingLoss) + 1)
+epochCountAccuracy = range(1, len(trainingAccuracy) + 1)
+
+plt.figure(1)
+plt.plot(epochCountLoss, trainingLoss, 'r-')
+plt.plot(epochCountLoss, testLoss, 'b-')
 plt.legend(['Training Loss', 'Test Loss'])
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
+plt.show();
+
+plt.figure(2)
+plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
+plt.plot(epochCountAccuracy, testAccuracy, 'b-')
+plt.legend(['Training Accuracy', 'Test Accuracy'])
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
 plt.show();
 
 # plt.imshow(trainPredict, interpolation='none')
