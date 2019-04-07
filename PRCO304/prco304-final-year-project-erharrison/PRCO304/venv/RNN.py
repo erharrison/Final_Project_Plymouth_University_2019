@@ -76,7 +76,7 @@ trainModelFit = model.fit(
     trainX,
     trainY,
     epochs=185,
-    batch_size=len(trainX),  # Number of samples per gradient update.
+    batch_size=82,  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
 
@@ -84,7 +84,7 @@ testModelFit = model.fit(
     testX,
     testY,
     epochs=185,
-    batch_size=len(testX), #  hard code number
+    batch_size=20,
     verbose=1,
     callbacks=[tensorboard])
 
@@ -122,6 +122,7 @@ plt.legend(['Training Accuracy', 'Test Accuracy'])
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.show();
+
 
 # plt.imshow(trainPredict, interpolation='none')
 # plt.colorbar()
