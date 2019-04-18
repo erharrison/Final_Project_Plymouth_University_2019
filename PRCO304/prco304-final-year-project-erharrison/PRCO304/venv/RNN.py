@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import TensorBoard
 import time
 from keras.utils.vis_utils import plot_model
+import os  # for ghraphviz
 
 from Cell import MinimalRNNCell
 
@@ -16,6 +17,9 @@ from Cell import MinimalRNNCell
 # fix random seed for reproducibility
 seed = 0
 numpy.random.seed(seed)
+
+# adding graphviz to the PATH
+os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/release/bin'
 
 dataframe = pandas.read_csv(
     r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv",
@@ -38,6 +42,7 @@ print(len(train), len(test))
 trainX, trainY = train[1:-1, :], train[2:, :] # shape is 82
 testX, testY = test[1:-1, :], test[2:, :] # shape is 20
 
+
 # (batch_size, timesteps, features)
 trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])  # trainX use fisrt row and see how that goes then use 20 rows etc.
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
@@ -55,7 +60,7 @@ model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(RNN(cell, return_sequences=True))
 model.add(keras.layers.SimpleRNN(77, return_sequences=True))
 #  model.add(LSTM(77, activation='sigmoid', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-# model.add(Dense(77, activation='tanh'))
+model.add(Dense(77, activation='tanh'))
 
 model.compile(loss='mean_squared_error',
               optimizer='adam',
@@ -91,6 +96,7 @@ testPredict = model.predict(testX)
 
 print(trainPredict.shape)
 print(testPredict.shape)
+
 
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
