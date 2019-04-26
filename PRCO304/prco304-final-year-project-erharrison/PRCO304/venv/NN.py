@@ -13,6 +13,8 @@ from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
 import cv2
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
 # fix random seed for reproducibility
 seed = 0
 numpy.random.seed(seed)
@@ -22,21 +24,32 @@ os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/relea
 
 # creating image for map of North America for data to be visualised on
 map_img = mpimg.imread(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
-)
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg')
 
 # Reading Excel file and spreadsheet of original data
-data = pd.read_excel(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\OriginalData.xlsx', sheet_name='Samples')
+data = pd.read_excel(
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\OriginalData.xlsx', sheet_name='Samples')
 
 # Creating dataframe from data and selecting columns
 dataframe = pd.DataFrame(data,
-                         columns=['decimalLongitude', 'decimalLatitude', 'diseaseDetected', 'year', 'country']
-                         )
+                         columns=['decimalLongitude',
+                                  'decimalLatitude',
+                                  'diseaseDetected',
+                                  'year',
+                                  'country'])
 
 
 # Creating a dictionary file for countries
 country = {'USA': 0, 'Canada': 1, 'Mexico': 2}
+# Replacing each item in country column with number, according to dictionary
 dataframe['country'] = [country[item] for item in dataframe['country']]
+
+for i in range(len(dataframe['decimalLongitude'])):
+    longitude = dataframe['decimalLongitude']
+    # Replacing each item in country column with number, according to dictionary
+    longitude[i] = int(round(longitude[i]))
+
+dataframe['decimalLongitude'] = longitude
 
 
 # Specifying a writer
