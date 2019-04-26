@@ -13,7 +13,7 @@ from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
 import cv2
 
-#  pd.options.mode.chained_assignment = None  # default='warn'
+pd.options.mode.chained_assignment = None  # default='warn'
 
 # fix random seed for reproducibility
 seed = 0
@@ -44,15 +44,21 @@ country = {'USA': 0, 'Canada': 1, 'Mexico': 2}
 # Replacing each item in country column with number, according to dictionary
 dataframe['country'] = [country[item] for item in dataframe['country']]
 
-for i in range(len(dataframe['decimalLongitude'])):
-    longitude = dataframe['decimalLongitude']
+longitude = dataframe['decimalLongitude']
+for i in range(len(longitude)):
     # Replacing each item in longitude column with number, according to dictionary
-    dataframe['decimalLongitude'] = int(round(longitude[i]))
+    longitude[i] = int(round(longitude[i])) #  TODO fix warning
+    # dataframe['decimalLongitude'][i] = int(round(dataframe['decimalLongitude'][i]))
     # dataframe['decimalLongitude'].loc[i] = int(round(longitude[i]))
-
 # Replacing dataframe with copy
 dataframe['decimalLongitude'] = longitude
 
+latitude = dataframe['decimalLatitude']
+for i in range(len(latitude)):
+    # Replacing each item in latitude column with number, according to dictionary
+    latitude[i] = int(round(latitude[i]))
+# Replacing dataframe with copy
+dataframe['decimalLatitude'] = latitude
 
 # Specifying a writer
 writer = pd.ExcelWriter(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\NewData.xlsx', engine='xlsxwriter')
