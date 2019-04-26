@@ -13,7 +13,7 @@ from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
 import cv2
 
-pd.options.mode.chained_assignment = None  # default='warn'
+#  pd.options.mode.chained_assignment = None  # default='warn'
 
 # fix random seed for reproducibility
 seed = 0
@@ -46,9 +46,10 @@ dataframe['country'] = [country[item] for item in dataframe['country']]
 
 for i in range(len(dataframe['decimalLongitude'])):
     longitude = dataframe['decimalLongitude']
-    # Replacing each item in country column with number, according to dictionary
+    # Replacing each item in loongitude column with number, according to dictionary
     longitude[i] = int(round(longitude[i]))
 
+# Replacing dataframe with copy
 dataframe['decimalLongitude'] = longitude
 
 
