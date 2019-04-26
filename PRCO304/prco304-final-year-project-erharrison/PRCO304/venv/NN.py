@@ -46,8 +46,9 @@ dataframe['country'] = [country[item] for item in dataframe['country']]
 
 for i in range(len(dataframe['decimalLongitude'])):
     longitude = dataframe['decimalLongitude']
-    # Replacing each item in loongitude column with number, according to dictionary
-    longitude[i] = int(round(longitude[i]))
+    # Replacing each item in longitude column with number, according to dictionary
+    dataframe['decimalLongitude'] = int(round(longitude[i]))
+    # dataframe['decimalLongitude'].loc[i] = int(round(longitude[i]))
 
 # Replacing dataframe with copy
 dataframe['decimalLongitude'] = longitude
@@ -57,7 +58,7 @@ dataframe['decimalLongitude'] = longitude
 writer = pd.ExcelWriter(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\NewData.xlsx', engine='xlsxwriter')
 
 # Writing dataframe to new Excel file
-dataframe.to_excel(excel_writer=writer, sheet_name='Data', header=False)
+dataframe.to_excel(excel_writer=writer, sheet_name='Data', header=False, index_label=False)
 writer.save()
 
 dataset = dataframe.values
