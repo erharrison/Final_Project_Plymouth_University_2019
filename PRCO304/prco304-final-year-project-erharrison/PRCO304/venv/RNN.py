@@ -10,9 +10,7 @@ from tensorflow.keras.callbacks import TensorBoard
 import time
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
-
-from Cell import MinimalRNNCell
-
+import cv2
 
 # fix random seed for reproducibility
 seed = 0
@@ -21,8 +19,13 @@ numpy.random.seed(seed)
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/release/bin'
 
+# creating image for map of North America for data to be visualised on
+map_img = numpy.zeros(
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg',
+    dtype='uint8')
+
 dataframe = pandas.read_csv(
-    r"C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv",
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
     delimiter=",",
     engine='python')
 
@@ -49,9 +52,6 @@ trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 print(trainX.shape, testX.shape)
-
-
-cell = MinimalRNNCell(77)
 
 
 # create recurrent neural network
