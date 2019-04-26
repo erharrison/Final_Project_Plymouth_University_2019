@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import numpy
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 from tensorflow.keras.callbacks import TensorBoard
 import time
 from keras.utils.vis_utils import plot_model
@@ -20,9 +21,10 @@ numpy.random.seed(seed)
 os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/release/bin'
 
 # creating image for map of North America for data to be visualised on
-map_img = numpy.zeros(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg',
-    dtype='uint8')
+map_img = mpimg.imread(
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
+)
+# numpy.zeros((400, 400, 3), dtype="uint8")
 
 dataframe = pandas.read_csv(
     r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
@@ -76,8 +78,6 @@ tensorboard = TensorBoard(
         r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs/{}'.format(name), histogram_freq=0,
     write_graph=True)
 
-# callbacks=[tensorboard]
-
 trainModelFit = model.fit(
     trainX,
     trainY,
@@ -97,12 +97,18 @@ testPredict = model.predict(testX)
 print(trainPredict.shape)
 print(testPredict.shape)
 
+# TODO iterate through prediction
+# Creating circles on map to visualise predictions
+cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
+cv2.imshow('Map', map_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
+# Visualising model
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
 
 trainingLoss = trainModelFit.history['loss']
-
 trainingAccuracy = trainModelFit.history['acc']
 
 epochCountLoss = range(1, len(trainingLoss) + 1)
