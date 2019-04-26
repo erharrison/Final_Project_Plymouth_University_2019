@@ -97,7 +97,8 @@ testPredict = model.predict(testX)
 print(trainPredict.shape)
 print(testPredict.shape)
 
-# TODO iterate through prediction
+# TODO iterate through predictions
+# TODO circle needs to be in location of long+lat
 # Creating circles on map to visualise predictions
 cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
 cv2.imshow('Map', map_img)
