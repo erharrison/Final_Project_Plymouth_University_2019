@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Flatten, LSTMCell, Activation, RNN
@@ -24,12 +24,27 @@ os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/relea
 map_img = mpimg.imread(
     r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
 )
-# numpy.zeros((400, 400, 3), dtype="uint8")
 
-dataframe = pandas.read_csv(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
-    delimiter=",",
-    engine='python')
+# Reading Excel file and spreadsheet of original data
+data = pd.read_excel(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\OriginalData.xlsx', sheet_name='Samples')
+
+# Creating dataframe from data and selecting columns
+dataframe = pd.DataFrame(data,
+                         columns=['decimalLongitude', 'decimalLatitude', 'diseaseDetected', 'year', 'country']
+                         )
+
+
+# Creating a dictionary file for countries
+country = {'USA': 0, 'Canada': 1, 'Mexico': 2}
+dataframe['country'] = [country[item] for item in dataframe['country']]
+
+
+# Specifying a writer
+writer = pd.ExcelWriter(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\NewData.xlsx', engine='xlsxwriter')
+
+# Writing dataframe to new Excel file
+dataframe.to_excel(excel_writer=writer, sheet_name='Data', header=False)
+writer.save()
 
 dataset = dataframe.values
 # floating point values are more suitable for neural networks
