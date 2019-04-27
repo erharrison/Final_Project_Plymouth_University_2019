@@ -63,7 +63,7 @@ model.add(keras.layers.SimpleRNN(77, return_sequences=True, activation='linear')
 model.add(Dense(77, activation='linear'))
 
 model.compile(loss='mean_squared_error',
-              optimizer='adam',
+              optimizer='Nadam',
               metrics=['accuracy',
                        'mean_squared_error',  # linear regression performance measure
                        'mean_squared_logarithmic_error',  # used to measure difference between actual and predicted
