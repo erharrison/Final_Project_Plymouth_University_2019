@@ -26,9 +26,11 @@ os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/relea
 map_img = mpimg.imread(
     r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg')
 
+original_data_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\OriginalData.xlsx'
+new_data_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\NewData.xlsx'
+
 # Reading Excel file and spreadsheet of original data
-data = pd.read_excel(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\OriginalData.xlsx', sheet_name='Samples')
+data = pd.read_excel(original_data_path, sheet_name='Samples')
 
 # Creating dataframe from data and selecting columns
 dataframe = pd.DataFrame(data,
@@ -61,11 +63,13 @@ for i in range(len(latitude)):
 dataframe['decimalLatitude'] = latitude
 
 # Specifying a writer
-writer = pd.ExcelWriter(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\NewData.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(new_data_path, engine='xlsxwriter')
 
 # Writing dataframe to new Excel file
-dataframe.to_excel(excel_writer=writer, sheet_name='Data', header=False, index_label=False)
+dataframe.to_excel(excel_writer=writer, sheet_name='Data')
 writer.save()
+
+# TODO count number of samples for each country/longlat - could save dataframe output to strings and then compare elements at the samer positions
 
 dataset = dataframe.values
 # floating point values are more suitable for neural networks
