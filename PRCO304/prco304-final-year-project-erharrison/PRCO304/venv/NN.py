@@ -24,7 +24,6 @@ os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/relea
 map_img = mpimg.imread(
     r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
 )
-# numpy.zeros((400, 400, 3), dtype="uint8")
 
 dataframe = pandas.read_csv(
     r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
@@ -44,12 +43,12 @@ test_size = int(len(dataset) * 0.2)  # 20%
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 print(len(train), len(test))
 
-trainX, trainY = train[1:-1, :], train[2:, :] # shape is 82
-testX, testY = test[1:-1, :], test[2:, :] # shape is 20
+trainX, trainY = train[1:-1, :], train[2:, :]  # shape is 82
+testX, testY = test[1:-1, :], test[2:, :]  # shape is 20
 
 
 # (batch_size, timesteps, features)
-trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])  # trainX use fisrt row and see how that goes then use 20 rows etc.
+trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])  # TODO trainX use fisrt row and see how that goes then use 20 rows etc.
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
@@ -58,11 +57,10 @@ print(trainX.shape, testX.shape)
 
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
-#  model.add(Activation('relu'))
 #  model.add(RNN(cell, return_sequences=True))
-model.add(keras.layers.SimpleRNN(77, return_sequences=True))
+model.add(keras.layers.SimpleRNN(77, return_sequences=True, activation='linear'))
 #  model.add(LSTM(77, activation='sigmoid', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
-model.add(Dense(77, activation='tanh'))
+model.add(Dense(77, activation='linear'))
 
 model.compile(loss='mean_squared_error',
               optimizer='adam',
@@ -97,14 +95,6 @@ testPredict = model.predict(testX)
 print(trainPredict.shape)
 print(testPredict.shape)
 
-# TODO iterate through predictions
-# TODO circle needs to be in location of long+lat
-# Creating circles on map to visualise predictions
-cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
-cv2.imshow('Map', map_img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
 # Visualising model
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
@@ -128,3 +118,12 @@ plt.legend(['Training Accuracy', 'Test Accuracy'])
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.show();
+
+
+# TODO iterate through predictions
+# TODO circle needs to be in location of long+lat
+# Creating circles on map to visualise predictions
+cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
+cv2.imshow('Map', map_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
