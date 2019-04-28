@@ -5,6 +5,7 @@ from keras.layers import Dense, LSTM, Flatten, LSTMCell, Activation, RNN
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import numpy
+import folium
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from tensorflow.keras.callbacks import TensorBoard
@@ -20,13 +21,13 @@ numpy.random.seed(seed)
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/release/bin'
 
-# creating image for map of North America for data to be visualised on
-map_img = mpimg.imread(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
-)
+map_image_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
+data_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv'
 
-dataframe = pandas.read_csv(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
+# creating image for map of North America for data to be visualised on
+map_img = mpimg.imread(map_image_path)
+
+dataframe = pandas.read_csv(data_file_path,
     delimiter=",",
     engine='python')
 
@@ -123,9 +124,11 @@ plt.show();
 # TODO iterate through predictions
 # TODO circle needs to be in location of long+lat
 
+
 # transpose prediction array
 trainPredict = numpy.ndarray.transpose(trainPredict)
 
+# iterating through arrays of locations
 for i in numpy.nditer(trainPredict):
     print(trainPredict)
 #     # Creating circles on map to visualise predictions
