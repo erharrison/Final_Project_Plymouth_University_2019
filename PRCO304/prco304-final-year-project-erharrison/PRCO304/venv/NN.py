@@ -28,9 +28,14 @@ coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-pro
 # creating image for map of North America for data to be visualised on
 map_img = mpimg.imread(map_image_path)
 
-data_file = pandas.ExcelFile(data_file_path)
-dataframe = data_file.parse('Sheet1')
-dataset = dataframe.values
+# Reading Excel file and spreadsheet of original data
+data_file = pandas.read_excel(data_file_path, sheet_name='Data')
+# Creating dataframe from data and selecting columns
+dataframe_data = pandas.DataFrame(data_file)
+
+# data_file = pandas.ExcelFile(data_file_path)
+# dataframe = data_file.parse('Sheet1')
+dataset = dataframe_data.values
 # floating point values are more suitable for neural networks
 dataset = dataset.astype('float32')
 
@@ -123,10 +128,9 @@ plt.show();
 # TODO iterate through predictions
 # TODO circle needs to be in location of long+lat
 
-coordinates_file = pandas.ExcelFile(coordinates_file_path)
-dataframe_coordinates = coordinates_file.parse('Coordinates')
+coordinates_file = pandas.read_excel(coordinates_file_path, sheet_name='Coordinates')
+dataframe_coordinates = pandas.DataFrame(coordinates_file)
 coordinates = dataframe_coordinates.values
-# floating point values are more suitable for neural networks
 coordinates = coordinates.astype('float32')
 
 # transpose prediction array
