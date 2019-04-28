@@ -26,7 +26,7 @@ map_img = mpimg.imread(
 )
 
 dataframe = pandas.read_csv(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\DataWithLocations.csv',
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
     delimiter=",",
     engine='python')
 
@@ -38,8 +38,8 @@ scaler = MinMaxScaler(feature_range=(0, 1))  # MinMaxScalar is from scikit learn
 dataset = scaler.fit_transform(dataset)
 
 # split into train and test sets
-train_size = int((len(dataset)-2) * 0.8)  # 80% - train_size = 84
-test_size = int((len(dataset)-2) * 0.2)  # 20% - test_size = 21
+train_size = int(len(dataset) * 0.8)  # 80% - train_size = 84
+test_size = int(len(dataset) * 0.2)  # 20% - test_size = 21
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 print(len(train), len(test))
 
@@ -122,9 +122,14 @@ plt.show();
 
 # TODO iterate through predictions
 # TODO circle needs to be in location of long+lat
+
+# transpose prediction array
+trainPredict = numpy.ndarray.transpose(trainPredict)
+
 for i in numpy.nditer(trainPredict):
-    # Creating circles on map to visualise predictions
-    cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
-    cv2.imshow('Map', map_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    print(trainPredict)
+#     # Creating circles on map to visualise predictions
+#     cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
+#     cv2.imshow('Map', map_img)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
