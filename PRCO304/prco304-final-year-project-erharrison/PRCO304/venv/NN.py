@@ -27,7 +27,7 @@ coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-pro
 data_file_path_excel = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.xlsx'
 
 # Reading Excel file and spreadsheet of original data
-data_file_excel = pandas.read_excel(data_file_path_excel, sheet_name='Data')
+data_file_excel = pandas.read_excel(data_file_path_excel, sheet_name='Data', header=None)
 # Creating dataframe from data and selecting columns
 dataframe_excel = pandas.DataFrame(data_file_excel)
 dataset_excel = dataframe_excel.values
@@ -137,7 +137,7 @@ plt.show();
 # TODO iterate through predictions
 # TODO circle needs to be in location of long+lat
 
-coordinates_file = pandas.read_excel(coordinates_file_path, sheet_name='Coordinates')
+coordinates_file = pandas.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
 dataframe_coordinates = pandas.DataFrame(coordinates_file)
 coordinates = dataframe_coordinates.values
 coordinates = coordinates.astype('float32')
