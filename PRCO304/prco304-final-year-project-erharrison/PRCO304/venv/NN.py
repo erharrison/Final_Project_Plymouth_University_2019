@@ -26,7 +26,7 @@ map_img = mpimg.imread(
 )
 
 dataframe = pandas.read_csv(
-    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv',
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\DataWithLocations.csv',
     delimiter=",",
     engine='python')
 
@@ -38,13 +38,13 @@ scaler = MinMaxScaler(feature_range=(0, 1))  # MinMaxScalar is from scikit learn
 dataset = scaler.fit_transform(dataset)
 
 # split into train and test sets
-train_size = int(len(dataset) * 0.8)  # 80%
-test_size = int(len(dataset) * 0.2)  # 20%
+train_size = int((len(dataset)-2) * 0.8)  # 80% - train_size = 84
+test_size = int((len(dataset)-2) * 0.2)  # 20% - test_size = 21
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 print(len(train), len(test))
 
-trainX, trainY = train[1:-1, :], train[2:, :]  # shape is 82
-testX, testY = test[1:-1, :], test[2:, :]  # shape is 20
+trainX, trainY = train[1:-1, :], train[2:, :]  # trainX shape is 82
+testX, testY = test[1:-1, :], test[2:, :]  # testX shape is 20
 
 
 # (batch_size, timesteps, features)
