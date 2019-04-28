@@ -142,6 +142,15 @@ dataframe_coordinates = pandas.DataFrame(coordinates_file)
 coordinates = dataframe_coordinates.values
 coordinates = coordinates.astype('float32')
 
+data = pandas.DataFrame({
+   'lat':coordinates_file[0], # this gets first column, need first row
+   'lon':[-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
+   'name':['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
+   'value':[10,12,40,70,23,43,100,43]
+})
+data
+
+
 # transpose prediction array
 trainPredict = numpy.ndarray.transpose(trainPredict)
 
