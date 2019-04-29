@@ -142,21 +142,34 @@ dataframe_coordinates = pandas.DataFrame(coordinates_file)
 coordinates = dataframe_coordinates.values
 coordinates = coordinates.astype('float32')
 
-data = pandas.DataFrame({
-   'lat':coordinates_file[0], # this gets first column, need first row
-   'lon':[-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
-   'name':['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
-   'value':[10,12,40,70,23,43,100,43]
+coordinates = pandas.DataFrame({
+   'lat': coordinates_file.iloc[1],  # this gets first second row - latitude
+   'lon': coordinates_file.iloc[0],  # gets first row - longitude
 })
-data
+
+# Making an empty folium map
+predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
 
 
 # transpose prediction array
-trainPredict = numpy.ndarray.transpose(trainPredict)
+# trainPredict = numpy.ndarray.transpose(trainPredict)
+
+# I can add marker one by one on the map
+for i in range(0, len(trainPredict[0, 0])):
+    folium.Circle(
+        location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
+        radius=trainPredict[0, 0, i] * 10000,
+        color='crimson',
+        fill=True,
+        fill_color='crimson'
+    ).add_to(predictions_map)
+
+# Save it as html
+predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
 
 # iterating through arrays of locations
-for i in numpy.nditer(trainPredict):
-    print(trainPredict[0, 1, i], coordinates)
+# for i in numpy.nditer(trainPredict):
+#     print(trainPredict[0, 1, i], coordinates)
 #     # Creating circles on map to visualise predictions
 #     cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
 #     cv2.imshow('Map', map_img)
