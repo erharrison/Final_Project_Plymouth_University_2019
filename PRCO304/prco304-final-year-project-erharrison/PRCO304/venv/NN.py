@@ -150,22 +150,25 @@ coordinates = pandas.DataFrame({
 # Making an empty folium map
 predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
 
+number_names = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77']
+
 
 # transpose prediction array
 # trainPredict = numpy.ndarray.transpose(trainPredict)
 
 # I can add marker one by one on the map
-for i in range(0, len(trainPredict[0, 0])):
-    folium.Circle(
-        location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-        radius=trainPredict[0, 0, i] * 10000,
-        color='crimson',
-        fill=True,
-        fill_color='crimson'
-    ).add_to(predictions_map)
-
-# Save it as html
-predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
+# for i in range(0, len(trainPredict[0, 0])):
+#     folium.Circle(
+#         location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
+#         popup=number_names[i],
+#         radius=400000,  # ((trainPredict[0, 0, i])**2) * 1000000,
+#         color='crimson',
+#         fill=True,
+#         fill_color='crimson'
+#     ).add_to(predictions_map)
+#
+# # Save it as html
+# predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
 
 # iterating through arrays of locations
 # for i in numpy.nditer(trainPredict):
@@ -175,3 +178,29 @@ predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-projec
 #     cv2.imshow('Map', map_img)
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
+
+
+# Make a data frame with dots to show on the map
+data = pandas.DataFrame({
+    'lat': [-58, 2, 145, 30.32, -4.03, -73.57, 36.82, -38.5],
+    'lon': [-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
+    'name': ['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
+    'value': [10, 12, 40, 70, 23, 43, 100, 43]
+})
+
+# Make an empty map
+m = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
+
+# I can add marker one by one on the map
+
+folium.Circle(
+    location= [5.33, -4.03],
+    popup='Buenos Aires',
+    radius=1000000,
+    color='crimson',
+    fill=True,
+    fill_color='crimson'
+    ).add_to(m)
+
+# Save it as html
+m.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
