@@ -1,25 +1,26 @@
+
+# TODO predict for missing years
+# TODO Data augmentation
+
+
 import pandas
-import keras
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Flatten, LSTMCell, Activation, RNN
+from keras.layers import Dense, SimpleRNN
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
 import numpy
 import folium
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from tensorflow.keras.callbacks import TensorBoard
-import time
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
-import cv2
 
 # fix random seed for reproducibility
 seed = 0
 numpy.random.seed(seed)
 
 # adding graphviz to the PATH
-os.environ["PATH"] += os.pathsep + 'C:/Users/emily/Downloads/graphviz-2.38/release/bin'
+os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Downloads\graphviz-2.38\release\bin'
 
 map_image_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
 # data_file_path_csv = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv'
@@ -37,17 +38,6 @@ dataset_excel = dataset_excel.astype('float32')
 # creating image for map of North America for data to be visualised on
 map_img = mpimg.imread(map_image_path)
 
-
-# data_file = pandas.read_excel(data_file_path, sheet_name='Data')
-# dataframe_data = pandas.DataFrame(data_file)
-
-
-# data_file_csv = pandas.read_csv(data_file_path_csv,
-#     delimiter=",",
-#     engine='python')
-# dataframe_csv = pandas.DataFrame(data_file_excel)
-
-
 scaler = MinMaxScaler(feature_range=(0, 1))  # MinMaxScalar is from scikit learn library
 dataset = scaler.fit_transform(dataset_excel)
 
@@ -62,7 +52,7 @@ testX, testY = test[1:-1, :], test[2:, :]  # testX shape is 20
 
 
 # (batch_size, timesteps, features)
-trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])  # TODO trainX use fisrt row and see how that goes then use 20 rows etc.
+trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
@@ -72,7 +62,7 @@ print(trainX.shape, testX.shape)
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
 #  model.add(RNN(cell, return_sequences=True))
-model.add(keras.layers.SimpleRNN(77, return_sequences=True, activation='linear'))
+model.add(SimpleRNN(77, return_sequences=True, activation='linear'))
 #  model.add(LSTM(77, activation='sigmoid', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
 model.add(Dense(77, activation='linear'))
 
@@ -87,7 +77,7 @@ name = "simple-recurrent-neural-network"  # .format(int(time.time()))
 
 tensorboard = TensorBoard(
     log_dir= # path to where file gets saved
-        r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs/{}'.format(name), histogram_freq=0,
+        r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs\{}'.format(name), histogram_freq=0,
     write_graph=True)
 
 trainModelFit = model.fit(
@@ -99,7 +89,7 @@ trainModelFit = model.fit(
     verbose=1,
     callbacks=[tensorboard])
 
-scores = model.evaluate(testX,testY,verbose=0)  # score of accuracy
+scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
 print(scores[0])
 
 # make predictions
@@ -143,14 +133,12 @@ coordinates = dataframe_coordinates.values
 coordinates = coordinates.astype('float32')
 
 coordinates = pandas.DataFrame({
-   'lat': coordinates_file.iloc[1],  # this gets first second row - latitude
-   'lon': coordinates_file.iloc[0],  # gets first row - longitude
+   'lat': coordinates_file.iloc[0],  # this gets first second row - latitude
+   'lon': coordinates_file.iloc[1],  # gets first row - longitude
 })
 
 # Making an empty folium map
 predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
-
-number_names = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77']
 
 
 # transpose prediction array
@@ -160,7 +148,6 @@ number_names = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15
 # for i in range(0, len(trainPredict[0, 0])):
 #     folium.Circle(
 #         location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-#         popup=number_names[i],
 #         radius=400000,  # ((trainPredict[0, 0, i])**2) * 1000000,
 #         color='crimson',
 #         fill=True,
@@ -188,19 +175,16 @@ data = pandas.DataFrame({
     'value': [10, 12, 40, 70, 23, 43, 100, 43]
 })
 
-# Make an empty map
-m = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
 
 # I can add marker one by one on the map
-
+# for i in range(0, len(trainPredict[0, 0])):
 folium.Circle(
-    location= [5.33, -4.03],
-    popup='Buenos Aires',
-    radius=1000000,
-    color='crimson',
-    fill=True,
-    fill_color='crimson'
-    ).add_to(m)
+        location= [coordinates.iloc[0]['lon'], coordinates.iloc[0]['lat']],
+        radius=1000000,
+        color='crimson',
+        fill=True,
+        fill_color='crimson'
+    ).add_to(predictions_map)
 
 # Save it as html
-m.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
+predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
