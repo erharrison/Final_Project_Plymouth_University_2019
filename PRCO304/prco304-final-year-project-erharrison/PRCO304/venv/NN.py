@@ -161,7 +161,7 @@ predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start
 for i in range(0, len(trainPredict[0, 0])):
     folium.Circle(
         location= [coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-        radius=((trainPredict[0, 0, i])**2) * 10000000,
+        radius=((trainPredict[0, 0, i])**2) * 10000000, # TODO need to figure out what to do about negative predictions
         color='crimson',
         fill=True,
         fill_color='crimson'
