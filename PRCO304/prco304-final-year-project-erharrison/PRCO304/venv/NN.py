@@ -168,19 +168,19 @@ predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start
 
 
 # Make a data frame with dots to show on the map
-data = pandas.DataFrame({
-    'lat': [-58, 2, 145, 30.32, -4.03, -73.57, 36.82, -38.5],
-    'lon': [-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
-    'name': ['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
-    'value': [10, 12, 40, 70, 23, 43, 100, 43]
-})
+# data = pandas.DataFrame({
+#     'lat': [-58, 2, 145, 30.32, -4.03, -73.57, 36.82, -38.5],
+#     'lon': [-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
+#     'name': ['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
+#     'value': [10, 12, 40, 70, 23, 43, 100, 43]
+# })
 
 
 # I can add marker one by one on the map
-# for i in range(0, len(trainPredict[0, 0])):
-folium.Circle(
-        location= [coordinates.iloc[0]['lon'], coordinates.iloc[0]['lat']],
-        radius=1000000,
+for i in range(0, len(trainPredict[0, 0])):
+    folium.Circle(
+        location= [coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
+        radius=100000,
         color='crimson',
         fill=True,
         fill_color='crimson'
