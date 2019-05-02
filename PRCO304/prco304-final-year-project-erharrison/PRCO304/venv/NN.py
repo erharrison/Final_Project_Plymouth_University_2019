@@ -144,16 +144,6 @@ predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start
 # transpose prediction array
 # trainPredict = numpy.ndarray.transpose(trainPredict)
 
-# I can add marker one by one on the map
-# for i in range(0, len(trainPredict[0, 0])):
-#     folium.Circle(
-#         location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-#         radius=400000,  # ((trainPredict[0, 0, i])**2) * 1000000,
-#         color='crimson',
-#         fill=True,
-#         fill_color='crimson'
-#     ).add_to(predictions_map)
-#
 # # Save it as html
 # predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
 
@@ -167,20 +157,11 @@ predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start
 #     cv2.destroyAllWindows()
 
 
-# Make a data frame with dots to show on the map
-# data = pandas.DataFrame({
-#     'lat': [-58, 2, 145, 30.32, -4.03, -73.57, 36.82, -38.5],
-#     'lon': [-34, 49, -38, 59.93, 5.33, 45.52, -1.29, -12.97],
-#     'name': ['Buenos Aires', 'Paris', 'melbourne', 'St Petersbourg', 'Abidjan', 'Montreal', 'Nairobi', 'Salvador'],
-#     'value': [10, 12, 40, 70, 23, 43, 100, 43]
-# })
-
-
 # I can add marker one by one on the map
 for i in range(0, len(trainPredict[0, 0])):
     folium.Circle(
         location= [coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-        radius=100000,
+        radius=((trainPredict[0, 0, i])**2) * 10000000,
         color='crimson',
         fill=True,
         fill_color='crimson'
