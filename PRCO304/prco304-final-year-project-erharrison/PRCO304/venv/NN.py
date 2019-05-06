@@ -1,7 +1,4 @@
-
-# TODO predict for missing years
 # TODO Data augmentation
-
 
 import pandas
 from keras.models import Sequential
@@ -133,14 +130,18 @@ predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start
 # transpose prediction array
 # trainPredict = numpy.ndarray.transpose(trainPredict)
 
-# TODO user input for what years they want to compare
+year1 = int(input("What year from the dataset do you want to map? (between 1888-2014)"))
+# to get row number from input year
+year1 = year1-1888
 
-for i in range(0, len(trainX[0, 0])):
-    if trainX[-1, 0, i] > 0:
+year2 = int(input("How many years into the future do you want to map for comparison? (max. 98 years)"))
+
+for i in range(0, len(dataset[0])):
+    if dataset[year1, i] > 0:
         folium.Circle(
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            popup=str(trainX[-1, 0, i]),
-            radius=(trainX[-1, 0, i]) * 1000000,
+            popup=str(dataset[year1, i]),
+            radius=(dataset[year1, i]) * 1000000,
             color='#99ccff',
             fill=True,
             fill_color='#99ccff'
@@ -149,11 +150,11 @@ for i in range(0, len(trainX[0, 0])):
 # I can add marker one by one on the map
 for i in range(0, len(trainPredict[0, 0])):
     # [sheet, row, column]
-    if trainPredict[9, 0, i] > 0:  # leaving out negative predictions
+    if trainPredict[year2, 0, i] > 0:  # leaving out negative predictions
         folium.Circle(
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            popup=str(trainPredict[9, 0, i]),
-            radius=(trainPredict[9, 0, i]) * 1000000,  # TODO need to figure out what to do about negative predictions
+            popup=str(trainPredict[year2, 0, i]),
+            radius=(trainPredict[year2, 0, i]) * 1000000,  # TODO need to figure out what to do about negative predictions
             color='crimson',
             fill=True,
             fill_color='crimson'
