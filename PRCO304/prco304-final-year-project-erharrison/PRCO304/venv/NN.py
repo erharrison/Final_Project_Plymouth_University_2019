@@ -20,10 +20,8 @@ seed = 0
 numpy.random.seed(seed)
 
 # adding graphviz to the PATH
-os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Downloads\graphviz-2.38\release\bin'
+os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
 
-map_image_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Map.jpg'
-# data_file_path_csv = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.csv'
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
 data_file_path_excel = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.xlsx'
 
@@ -35,9 +33,6 @@ dataset_excel = dataframe_excel.values
 # floating point values are more suitable for neural networks
 dataset_excel = dataset_excel.astype('float32')
 
-# creating image for map of North America for data to be visualised on
-map_img = mpimg.imread(map_image_path)
-
 scaler = MinMaxScaler(feature_range=(0, 1))  # MinMaxScalar is from scikit learn library
 dataset = scaler.fit_transform(dataset_excel)
 
@@ -47,6 +42,7 @@ test_size = int(len(dataset) * 0.2)  # 20% - test_size = 21
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 print(len(train), len(test))
 
+# TODO experiment with different test datasets
 trainX, trainY = train[1:-1, :], train[2:, :]  # trainX shape is 82
 testX, testY = test[1:-1, :], test[2:, :]  # testX shape is 20
 
@@ -61,9 +57,7 @@ print(trainX.shape, testX.shape)
 
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
-#  model.add(RNN(cell, return_sequences=True))
-model.add(SimpleRNN(77, return_sequences=True, activation='linear'))
-#  model.add(LSTM(77, activation='sigmoid', use_bias=True, kernel_initializer='he_normal', return_sequences=True))
+model.add(SimpleRNN(77, return_sequences=True, activation='linear', kernel_initializer='glorot_normal'))
 model.add(Dense(77, activation='linear'))
 
 model.compile(loss='mean_squared_error',
@@ -123,10 +117,6 @@ plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.show();
 
-
-# TODO iterate through predictions
-# TODO circle needs to be in location of long+lat
-
 coordinates_file = pandas.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
 dataframe_coordinates = pandas.DataFrame(coordinates_file)
 coordinates = dataframe_coordinates.values
@@ -140,32 +130,36 @@ coordinates = pandas.DataFrame({
 # Making an empty folium map
 predictions_map = folium.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
 
-
 # transpose prediction array
 # trainPredict = numpy.ndarray.transpose(trainPredict)
 
-# # Save it as html
-# predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
+# TODO user input for what years they want to compare
 
-# iterating through arrays of locations
-# for i in numpy.nditer(trainPredict):
-#     print(trainPredict[0, 1, i], coordinates)
-#     # Creating circles on map to visualise predictions
-#     cv2.circle(map_img, (200, 200), trainPredict[0, 0, 0], (0, 20, 200), 2)
-#     cv2.imshow('Map', map_img)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
-
+for i in range(0, len(trainX[0, 0])):
+    if trainX[-1, 0, i] > 0:
+        folium.Circle(
+            location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
+            popup=str(trainX[-1, 0, i]),
+            radius=(trainX[-1, 0, i]) * 1000000,
+            color='#99ccff',
+            fill=True,
+            fill_color='#99ccff'
+        ).add_to(predictions_map)
 
 # I can add marker one by one on the map
 for i in range(0, len(trainPredict[0, 0])):
-    folium.Circle(
-        location= [coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-        radius=((trainPredict[0, 0, i])**2) * 10000000, # TODO need to figure out what to do about negative predictions
-        color='crimson',
-        fill=True,
-        fill_color='crimson'
-    ).add_to(predictions_map)
+    # [sheet, row, column]
+    if trainPredict[9, 0, i] > 0:  # leaving out negative predictions
+        folium.Circle(
+            location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
+            popup=str(trainPredict[9, 0, i]),
+            radius=(trainPredict[9, 0, i]) * 1000000,  # TODO need to figure out what to do about negative predictions
+            color='crimson',
+            fill=True,
+            fill_color='crimson'
+        ).add_to(predictions_map)
+
 
 # Save it as html
-predictions_map.save(r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
+predictions_map.save(
+    r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html')
