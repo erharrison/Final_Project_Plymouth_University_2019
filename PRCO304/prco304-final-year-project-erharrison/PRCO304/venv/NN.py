@@ -23,7 +23,7 @@ numpy.random.seed(seed)
 os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
 
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
-data_file_path_excel = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Data.xlsx'
+data_file_path_excel = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\ImputedData.xlsx'
 
 # Reading Excel file and spreadsheet of original data
 data_file_excel = pandas.read_excel(data_file_path_excel, sheet_name='Data', header=None)
