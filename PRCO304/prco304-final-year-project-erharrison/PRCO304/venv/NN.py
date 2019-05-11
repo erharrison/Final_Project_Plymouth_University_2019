@@ -12,37 +12,40 @@ import folium as fl
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard as tb
-sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+from keras import regularizers
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
+import datetime
 
 
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
 
+# addresses to file path
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
 data_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\ImputedData.xlsx'
 map_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html'
 
+
 # Reading Excel file and spreadsheet of original data
 data_file_excel = pd.read_excel(data_file_path, sheet_name='Data', header=None)
-# Creating dataframe from data and selecting columns
+# Creating dataframe from data
 dataframe_excel = pd.DataFrame(data_file_excel)
 dataset_excel = dataframe_excel.values
 # floating point values are more suitable for neural networks
 dataset_excel = dataset_excel.astype('float32')
 
-scaler = mms(feature_range=(0, 1))  # MinMaxScalar is from scikit learn library
-dataset = scaler.fit_transform(dataset_excel)
+scalar = mms(feature_range=(0, 1))
+dataset = scalar.fit_transform(dataset_excel)  # scaling the dataset to be between 0 and 1
 
 # split into train and test sets
-train_size = int(len(dataset) * 0.8)  # 80% - train_size = 84
-test_size = int(len(dataset) * 0.2)  # 20% - test_size = 21
+train_size = int(len(dataset) * 0.8)  # 80%
+test_size = int(len(dataset) * 0.2)  # 20%
 train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 
-# TODO experiment with different test datasets
-trainX, trainY = train[1:-1, :], train[2:, :]  # trainX shape is 82
-testX, testY = test[1:-1, :], test[2:, :]  # testX shape is 20
+# train and test datasets separated into input and expected output
+trainX, trainY = train[1:-1, :], train[2:, :]
+testX, testY = test[1:-1, :], test[2:, :]
 
 
 # reshape to (batch_size, timesteps, features) for input for RNN
@@ -50,13 +53,18 @@ trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
 trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
-print(trainX.shape, testX.shape)
 
 
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
-model.add(SimpleRNN(77, return_sequences=True, activation='linear', kernel_initializer='glorot_normal'))
-model.add(Dense(77, activation='linear'))
+model.add(SimpleRNN(77,
+                    return_sequences=True,
+                    activation='linear',
+                    kernel_initializer='glorot_normal'))
+model.add(Dense(77,
+                activation='linear'
+                )
+          )
 
 model.compile(loss='mean_squared_error',
               optimizer='Nadam',
@@ -65,7 +73,8 @@ model.compile(loss='mean_squared_error',
                        'mean_squared_logarithmic_error',  # used to measure difference between actual and predicted
                        'mean_absolute_error'])  # measure how close predictions are to output])
 
-name = "simple-recurrent-neural-network"
+time = datetime.datetime.now().time()
+name = "simple-recurrent-neural-network-%s" % time
 
 tensorboard = tb(
     log_dir=  # path to where file gets saved
@@ -83,6 +92,7 @@ trainModelFit = model.fit(
 
 scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
 print(scores[0])
+
 
 # make predictions
 trainPredict = model.predict(trainX)
