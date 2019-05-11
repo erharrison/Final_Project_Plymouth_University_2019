@@ -25,7 +25,7 @@ os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-fin
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
 data_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\ImputedData.xlsx'
 map_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html'
-
+tensorboard_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs\{}'
 
 # Reading Excel file and spreadsheet of original data
 data_file_excel = pd.read_excel(data_file_path, sheet_name='Data', header=None)
@@ -78,7 +78,7 @@ name = "simple-recurrent-neural-network-%s" % time
 
 tensorboard = tb(
     log_dir=  # path to where file gets saved
-        r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\PRCO304\venv\TensorBoardResults\logs\{}'.format(name), histogram_freq=0,
+        tensorboard_path.format(name), histogram_freq=0,
     write_graph=True)
 
 trainModelFit = model.fit(
