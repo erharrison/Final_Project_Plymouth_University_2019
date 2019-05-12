@@ -1,9 +1,7 @@
 # fix random seed for reproducibility
 from numpy.random import seed
-
 seed(1)
 from tensorflow import set_random_seed
-
 set_random_seed(2)
 
 import pandas as pd
@@ -19,9 +17,9 @@ from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
 import datetime
 
+
 # adding graphviz to the PATH
-os.environ[
-    "PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
+os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
 
 # addresses to file path
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
@@ -43,11 +41,12 @@ dataset = scalar.fit_transform(dataset_excel)  # scaling the dataset to be betwe
 # split into train and test sets
 train_size = int(len(dataset) * 0.8)  # 80%
 test_size = int(len(dataset) * 0.2)  # 20%
-train, test = dataset[0:train_size, :], dataset[train_size:(2 * train_size), :]
+train, test = dataset[0:train_size, :], dataset[train_size:(2*train_size), :]
 
 # train and test datasets separated into input and expected output
 trainX, trainY = train[1:-1, :], train[2:, :]
 testX, testY = test[1:-1, :], test[2:, :]
+
 
 # reshape to (batch_size, timesteps, features) for input for RNN
 trainX = trainX.reshape(trainX.shape[0], 1, trainX.shape[1])
@@ -55,14 +54,17 @@ trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 
-model = Sequential()  # Sequential model is a linear stack of layers
+
 # create recurrent neural network
+model = Sequential()  # Sequential model is a linear stack of layers
 model.add(SimpleRNN(77,
                     return_sequences=True,
                     activation='linear',
                     kernel_initializer='glorot_normal'))
 model.add(Dense(77,
-                activation='linear'))
+                activation='linear'
+                )
+          )
 
 model.compile(loss='mean_squared_error',
               optimizer='Nadam',
@@ -71,8 +73,7 @@ model.compile(loss='mean_squared_error',
                        'mean_squared_logarithmic_error',  # used to measure difference between actual and predicted
                        'mean_absolute_error'])  # measure how close predictions are to output])
 
-time = datetime.datetime.now().time()
-name = "simple-recurrent-neural-network-%s" % time
+name = "simple-recurrent-neural-network"
 
 tensorboard = tb(
     log_dir=  # path to where file gets saved
@@ -83,7 +84,7 @@ tensorboard = tb(
 trainModelFit = model.fit(
     trainX,
     trainY,
-    validation_data=(testX, testY),
+    validation_data=(testX,testY),
     epochs=100,
     batch_size=1,  # Number of samples per gradient update.
     verbose=1,
@@ -91,6 +92,7 @@ trainModelFit = model.fit(
 
 scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
 print(scores[0])
+
 
 # make predictions
 trainPredict = model.predict(trainX)
@@ -129,8 +131,8 @@ coordinates = dataframe_coordinates.values
 coordinates = coordinates.astype('float32')
 
 coordinates = pd.DataFrame({
-    'lat': coordinates_file.iloc[0],  # this gets first row - latitude
-    'lon': coordinates_file.iloc[1],  # gets first second - longitude
+   'lat': coordinates_file.iloc[0],  # this gets first row - latitude
+   'lon': coordinates_file.iloc[1],  # gets first second - longitude
 })
 
 # Making an empty folium map
@@ -138,10 +140,10 @@ predictions_map = fl.Map(location=[20, 0], tiles="Mapbox Bright", zoom_start=2)
 
 year1 = int(input("What year from the dataset do you want to map? (between 1888-2014)"))
 # to get row number from input year
-year1 = year1 - 1888
+year1 = year1-1888
 
 year2 = int(input("How many years into the future do you want to map for comparison? (max. 99 years)"))
-year2 = year2 - 1  # a regular user is unlikely to assume zero based numbering
+year2 = year2-1  # a regular user is unlikely to assume zero based numbering
 
 for i in range(0, len(dataset[0])):
     if dataset[year1, i] > 0:
@@ -166,6 +168,7 @@ for i in range(0, len(trainPredict[0, 0])):
             fill=True,
             fill_color='#DC143C'
         ).add_to(predictions_map)
+
 
 # Save it as html
 predictions_map.save(map_path)
