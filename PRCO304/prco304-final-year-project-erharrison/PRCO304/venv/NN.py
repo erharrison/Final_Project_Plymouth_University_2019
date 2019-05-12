@@ -82,7 +82,7 @@ trainModelFit = model.fit(
     trainX,
     trainY,
     validation_data=(testX, testY),
-    epochs=50,
+    epochs=500,
     batch_size=1,  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
@@ -142,30 +142,28 @@ year1 = year1-1888
 year2 = int(input("How many years into the future do you want to map for comparison? (max. 99 years)"))
 year2 = year2-1  # a regular user is unlikely to assume zero based numbering
 
-for i in range(0, len(dataset[0])):
-    if dataset[year1, i] > 0:
+for i in range(0, len(dataset[0])):  # for loop going for the length of the dataset
+    if dataset[year1, i] > 0:  # iterating through the locations (columns) of the year the user input
         fl.Circle(
+            # iterating through the coordinates from the Excel file to get longitude and latitude coordinates
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            popup=str(dataset[year1, i]),
             radius=(dataset[year1, i]) * 100000,
-            color='#99CCFF',
+            color='#99CCFF',  # css colour code for blue
             fill=True,
             fill_color='#99CCFF'
         ).add_to(predictions_map)
 
 # I can add marker one by one on the map
 for i in range(0, len(trainPredict[0, 0])):
-    # [sheet, row, column]
+    # [sheet, row, column] iterating throught the columns of the first row of the sheet corresponding to the chosen year
     if trainPredict[year2, 0, i] > 0:  # leaving out negative predictions
         fl.Circle(
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            popup=str(trainPredict[year2, 0, i]),
             radius=(trainPredict[year2, 0, i]) * 1000000,
-            color='#DC143C',
+            color='#DC143C',  # css colour code for crimson
             fill=True,
             fill_color='#DC143C'
         ).add_to(predictions_map)
-
 
 # Save it as html
 predictions_map.save(map_path)
