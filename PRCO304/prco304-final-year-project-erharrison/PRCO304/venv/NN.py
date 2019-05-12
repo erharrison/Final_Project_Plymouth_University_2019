@@ -59,44 +59,41 @@ testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 model = Sequential()  # Sequential model is a linear stack of layers
 model.add(SimpleRNN(77,
                     return_sequences=True,
-                    activation='linear',
-                    kernel_initializer='glorot_normal'))
+                    activation='linear'))
 model.add(Dense(77,
-                activation='linear'
-                )
-          )
+                activation='linear'))
 
 model.compile(loss='mean_squared_error',
               optimizer='Nadam',
               metrics=['accuracy',
-                       'mean_squared_error',  # linear regression performance measure
-                       'mean_squared_logarithmic_error',  # used to measure difference between actual and predicted
-                       'mean_absolute_error'])  # measure how close predictions are to output])
+                       'mean_squared_error',
+                       'mean_squared_logarithmic_error',
+                       'mean_absolute_error'])
+
 
 name = "simple-recurrent-neural-network"
-
 tensorboard = tb(
-    log_dir=  # path to where file gets saved
-    tensorboard_path.format(name),
+    log_dir=
+    tensorboard_path.format(name),  # path to where file gets saved
     histogram_freq=0,
     write_graph=True)
 
 trainModelFit = model.fit(
     trainX,
     trainY,
-    validation_data=(testX,testY),
-    epochs=100,
+    validation_data=(testX, testY),
+    epochs=50,
     batch_size=1,  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
 
+# calculating accuracy score
 scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
-print(scores[0])
+print('accuracy score = {}'.format(scores[0]))
 
 
 # make predictions
 trainPredict = model.predict(trainX)
-testPredict = model.predict(testX)
 
 # Visualising model
 print(model.summary())
