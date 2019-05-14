@@ -54,9 +54,9 @@ testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 
 problem = {
-    'num_vars': len(trainX),
-    'names': trainX,
-    'bounds': [np.min(trainX), np.max(trainX)]
+    'num_vars': len(trainY),
+    'names': trainY,
+    'bounds': [np.min(trainY), np.max(trainY)]
 }
 
 # create recurrent neural network
@@ -99,7 +99,7 @@ print('accuracy score = {}'.format(scores[0]))
 
 
 
-Si = sobol.analyze(problem, trainX, calc_second_order=False)
+Si = sobol.analyze(problem, trainY, calc_second_order=False)
 print(Si['S1'])
 
 # make predictions
