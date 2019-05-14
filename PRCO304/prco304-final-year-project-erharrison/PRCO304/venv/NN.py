@@ -13,7 +13,9 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import TensorBoard as tb
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
-
+from SALib.analyze import sobol
+from SALib.sample import saltelli
+import numpy as np
 
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
@@ -51,6 +53,11 @@ trainY = trainY.reshape(trainY.shape[0], 1, trainY.shape[1])
 testX = testX.reshape(testX.shape[0], 1, testX.shape[1])
 testY = testY.reshape(testY.shape[0], 1, testY.shape[1])
 
+problem = {
+    'num_vars': len(trainX),
+    'names': trainX,
+    'bounds': [np.min(trainX), np.max(trainX)]
+}
 
 # create recurrent neural network
 model = Sequential()  # Sequential model is a linear stack of layers
@@ -89,6 +96,11 @@ trainModelFit = model.fit(
 scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
 print('accuracy score = {}'.format(scores[0]))
 
+
+
+
+Si = sobol.analyze(problem, trainX, calc_second_order=False)
+print(Si['S1'])
 
 # make predictions
 trainPredict = model.predict(trainX)
