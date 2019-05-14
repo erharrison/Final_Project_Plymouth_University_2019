@@ -10,12 +10,9 @@ from keras.layers import Dense, SimpleRNN, Dropout
 from sklearn.preprocessing import MinMaxScaler as mms
 import folium as fl
 import matplotlib.pyplot as plt
-import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard as tb
-from keras import regularizers
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
-import datetime
 
 
 # adding graphviz to the PATH
@@ -60,7 +57,7 @@ model = Sequential()  # Sequential model is a linear stack of layers
 model.add(SimpleRNN(77,
                     return_sequences=True,
                     activation='linear'))
-model.add(Dropout(0.2))  # adding 20% dropout to neurons of the hidden layer
+model.add(Dropout(0.1))  # adding 10% dropout to neurons of the hidden layer
 model.add(Dense(77,
                 activation='linear'))
 
@@ -83,7 +80,7 @@ trainModelFit = model.fit(
     trainX,
     trainY,
     validation_data=(testX, testY),
-    epochs=500,
+    epochs=200,
     batch_size=1,  # Number of samples per gradient update.
     verbose=1,
     callbacks=[tensorboard])
@@ -95,6 +92,7 @@ print('accuracy score = {}'.format(scores[0]))
 
 # make predictions
 trainPredict = model.predict(trainX)
+
 
 # Visualising model
 print(model.summary())
@@ -148,7 +146,7 @@ for i in range(0, len(dataset[0])):  # for loop going for the length of the data
         fl.Circle(
             # iterating through the coordinates from the Excel file to get longitude and latitude coordinates
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            radius=(dataset[year1, i]) * 100000,
+            radius=(dataset[year1, i]) * 1000000,
             color='#99CCFF',  # css colour code for blue
             fill=True,
             fill_color='#99CCFF'
@@ -160,7 +158,7 @@ for i in range(0, len(trainPredict[0, 0])):
     if trainPredict[year2, 0, i] > 0:  # leaving out negative predictions
         fl.Circle(
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            radius=(trainPredict[year2, 0, i]) * 100000,
+            radius=(trainPredict[year2, 0, i]) * 1000000,
             color='#DC143C',  # css colour code for crimson
             fill=True,
             fill_color='#DC143C'
