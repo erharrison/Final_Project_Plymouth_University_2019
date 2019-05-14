@@ -6,7 +6,7 @@ set_random_seed(2)
 
 import pandas as pd
 from keras.models import Sequential
-from keras.layers import Dense, SimpleRNN
+from keras.layers import Dense, SimpleRNN, Dropout
 from sklearn.preprocessing import MinMaxScaler as mms
 import folium as fl
 import matplotlib.pyplot as plt
@@ -60,6 +60,7 @@ model = Sequential()  # Sequential model is a linear stack of layers
 model.add(SimpleRNN(77,
                     return_sequences=True,
                     activation='linear'))
+model.add(Dropout(0.2))  # adding 20% dropout to neurons of the hidden layer
 model.add(Dense(77,
                 activation='linear'))
 
@@ -159,7 +160,7 @@ for i in range(0, len(trainPredict[0, 0])):
     if trainPredict[year2, 0, i] > 0:  # leaving out negative predictions
         fl.Circle(
             location=[coordinates.iloc[i]['lon'], coordinates.iloc[i]['lat']],
-            radius=(trainPredict[year2, 0, i]) * 1000000,
+            radius=(trainPredict[year2, 0, i]) * 100000,
             color='#DC143C',  # css colour code for crimson
             fill=True,
             fill_color='#DC143C'
