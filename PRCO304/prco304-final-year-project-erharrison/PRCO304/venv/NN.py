@@ -18,7 +18,7 @@ import os  # for ghraphviz
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
 
-# addresses to file path
+# addresses to file paths
 coordinates_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\Coordinates.xlsx'
 data_file_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\ImputedData.xlsx'
 map_path = r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\mymap.html'
@@ -61,6 +61,7 @@ model.add(Dropout(0.1))  # adding 10% dropout to neurons of the hidden layer
 model.add(Dense(77,
                 activation='linear'))
 
+# compiling model
 model.compile(loss='mean_squared_error',
               optimizer='Nadam',
               metrics=['accuracy',
@@ -69,6 +70,7 @@ model.compile(loss='mean_squared_error',
                        'mean_absolute_error'])
 
 
+# setting up tensorboard
 name = "simple-recurrent-neural-network"
 tensorboard = tb(
     log_dir=
@@ -76,6 +78,7 @@ tensorboard = tb(
     histogram_freq=0,
     write_graph=True)
 
+# fitting the model
 trainModelFit = model.fit(
     trainX,
     trainY,
@@ -83,7 +86,7 @@ trainModelFit = model.fit(
     epochs=200,
     batch_size=1,  # Number of samples per gradient update.
     verbose=1,
-    callbacks=[tensorboard])
+    callbacks=[tensorboard])  # running tensorboard
 
 # calculating accuracy score
 scores = model.evaluate(testX, testY, verbose=0)  # score of accuracy
@@ -94,7 +97,7 @@ print('accuracy score = {}'.format(scores[0]))
 trainPredict = model.predict(trainX)
 
 
-# Visualising model
+# Visualising model in python console
 print(model.summary())
 plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
 
