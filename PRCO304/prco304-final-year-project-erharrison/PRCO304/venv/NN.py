@@ -141,8 +141,6 @@ plt.xlabel('Epoch')
 plt.ylabel('Metric Value')
 plt.show();
 
-print()
-
 # reading coordinates Excel file and creating Dataframe
 coordinates_file = pd.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
 dataframe_coordinates = pd.DataFrame(coordinates_file)
@@ -164,6 +162,7 @@ year1 = year1-1888
 year2 = int(input("How many years into the future do you want to map for comparison? (max. 99 years)"))
 year2 = year2-1  # a regular user is unlikely to assume zero based numbering
 
+# Adding circle one by one on the map
 for i in range(0, len(dataset[0])):  # for loop going for the length of the dataset
     if dataset[year1, i] > 0:  # iterating through the locations (columns) of the year the user input
         fl.Circle(
@@ -175,7 +174,6 @@ for i in range(0, len(dataset[0])):  # for loop going for the length of the data
             fill_color='#99CCFF'
         ).add_to(predictions_map)
 
-# I can add marker one by one on the map
 for i in range(0, len(trainPredict[0, 0])):
     # [sheet, row, column] iterating throught the columns of the first row of the sheet corresponding to the chosen year
     if trainPredict[year2, 0, i] > 0:  # leaving out negative predictions
