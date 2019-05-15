@@ -107,6 +107,7 @@ trainingAccuracy = trainModelFit.history['acc']
 epochCountLoss = range(1, len(trainingLoss) + 1)
 epochCountAccuracy = range(1, len(trainingAccuracy) + 1)
 
+# setting the axes for the loss graph, so that it is the same as the graph of metrics
 axes = plt.gca()
 axes.set_xlim([0, 200])
 axes.set_ylim([0, 0.06])
