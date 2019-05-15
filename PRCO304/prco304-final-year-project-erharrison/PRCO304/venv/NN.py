@@ -109,19 +109,20 @@ epochCountAccuracy = range(1, len(trainingAccuracy) + 1)
 
 # creating matplotlib graph for plotting loss
 plt.figure(1)
-plt.plot(epochCountLoss, trainingLoss, 'r-')
-plt.legend(['Training Loss', 'Test Loss'])
+plt.plot(epochCountLoss, trainingLoss, 'b-')
+plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
+plt.legend(['Training Loss', 'Training Accuracy'])
 plt.xlabel('Epoch')
-plt.ylabel('Loss')
+plt.ylabel('')
 plt.show();
 
-# creating matplotlib graph for plotting accuracy
-plt.figure(2)
-plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
-plt.legend(['Training Accuracy', 'Test Accuracy'])
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.show();
+# # creating matplotlib graph for plotting accuracy
+# plt.figure(2)
+# plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
+# plt.legend(['Training Accuracy', 'Test Accuracy'])
+# plt.xlabel('Epoch')
+# plt.ylabel('Accuracy')
+# plt.show();
 
 # reading coordinates Excel file and creating Dataframe
 coordinates_file = pd.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
