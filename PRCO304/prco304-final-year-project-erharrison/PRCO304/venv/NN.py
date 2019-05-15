@@ -107,22 +107,38 @@ trainingAccuracy = trainModelFit.history['acc']
 epochCountLoss = range(1, len(trainingLoss) + 1)
 epochCountAccuracy = range(1, len(trainingAccuracy) + 1)
 
+axes = plt.gca()
+axes.set_xlim([0, 200])
+axes.set_ylim([0, 0.06])
+
 # creating matplotlib graph for plotting loss
 plt.figure(1)
-plt.plot(epochCountLoss, trainingLoss, 'b-')
-plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
-plt.legend(['Training Loss', 'Training Accuracy'])
+plt.plot(epochCountLoss, trainingLoss, 'b')
+plt.title('Rate of Loss')
+plt.legend(['Training Loss',])
 plt.xlabel('Epoch')
-plt.ylabel('')
+plt.ylabel('Loss')
 plt.show();
 
-# # creating matplotlib graph for plotting accuracy
-# plt.figure(2)
-# plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
-# plt.legend(['Training Accuracy', 'Test Accuracy'])
-# plt.xlabel('Epoch')
-# plt.ylabel('Accuracy')
-# plt.show();
+# creating matplotlib graph for plotting accuracy
+plt.figure(2)
+plt.plot(epochCountAccuracy, trainingAccuracy, 'r-')
+plt.title('Accuracy of Training')
+plt.legend(['Training Accuracy'])
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.show();
+
+# plot metrics
+plt.figure(3)
+plt.plot((trainModelFit.history['mean_squared_error']), 'b')
+plt.plot((trainModelFit.history['mean_squared_logarithmic_error']), 'r')
+plt.plot((trainModelFit.history['mean_absolute_error']), 'y')
+plt.title('Regression Metrics')
+plt.legend(['Mean Squared Error', 'Mean Squared Logarithmic Error', 'Mean Absolute Error'])
+plt.xlabel('Epoch')
+plt.ylabel('Metric Value')
+plt.show();
 
 # reading coordinates Excel file and creating Dataframe
 coordinates_file = pd.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
