@@ -1,9 +1,14 @@
 # prco304-final-year-project-erharrison
 prco304-final-year-project-erharrison created by GitHub Classroom
 
+HOW TO EXECUTE THIS APPLICATION
+
 1. Once the project has been downloaded, it needs to be unzipped.
+
 2. Install Python 3.6.7
+
 3. Set the project interpreter to be the python.exe that is associated with the installed Python
+
 4. Before the application can be run successfully the following libraries and their specific versions need to be installed 
 (I recommend installing pip first, then installing everything else using pip):
 - Jinja2	2.10.1
@@ -67,8 +72,13 @@ prco304-final-year-project-erharrison created by GitHub Classroom
 - SALib	1.3.4
 
 4. Exchange the file paths in the code for ones that are appropriate for your device.
+   (The dataset is contained within the file 'ImputedData.xlsx' held within this repository.
+   The coordinates data is within the file 'Coordinates.xlsx', also held within this repository.)
+   
 5. Run the file NN.py
+
 6. At the end of the applications's execution it will prompt for user input in the Python console.
+
 7. After this has been entered the bubble map is generated, this has to be manually opened
 
 8. To view TensorBoard, after the map has been generated:
