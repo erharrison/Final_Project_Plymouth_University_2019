@@ -141,6 +141,8 @@ plt.xlabel('Epoch')
 plt.ylabel('Metric Value')
 plt.show();
 
+print()
+
 # reading coordinates Excel file and creating Dataframe
 coordinates_file = pd.read_excel(coordinates_file_path, sheet_name='Coordinates', header=None)
 dataframe_coordinates = pd.DataFrame(coordinates_file)
