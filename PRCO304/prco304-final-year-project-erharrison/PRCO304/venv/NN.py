@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import TensorBoard as tb
 from keras.utils.vis_utils import plot_model
 import os  # for ghraphviz
-
+from sklearn.metrics import mean_squared_error as mse, mean_absolute_error as mae, explained_variance_score as evs  # importing metrics
 
 # adding graphviz to the PATH
 os.environ["PATH"] += os.pathsep + r'C:\Users\emily\Documents\GitHub\prco304-final-year-project-erharrison\PRCO304\prco304-final-year-project-erharrison\graphviz-2.38\release\bin'
@@ -106,6 +106,11 @@ trainingAccuracy = trainModelFit.history['acc']
 
 epochCountLoss = range(1, len(trainingLoss) + 1)
 epochCountAccuracy = range(1, len(trainingAccuracy) + 1)
+
+print(evs(trainX[-1, 0], trainPredict[-1, 0]))
+print(mse(trainX[-1, 0], trainPredict[-1, 0]))
+# print(msle(trainX[-1, 0], trainPredict[-1, 0])) #  didn't work because of negative values in arrays
+print(mae(trainX[-1, 0], trainPredict[-1, 0]))
 
 # setting the axes for the loss graph, so that it is the same as the graph of metrics
 axes = plt.gca()
