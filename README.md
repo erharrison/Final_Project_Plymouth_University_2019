@@ -33,7 +33,7 @@ HOW TO EXECUTE THIS APPLICATION
 - future	0.17.1
 - folium	0.8.3
 - gast	0.2.2
-- graphviz	0.10.1
+- graphviz	0.10.1 (Graphviz is used for plotting the model and also needs to be installed via a web browser for it to work.)
 - grpcio	1.20.0
 - h5py	2.9.0
 - idna	2.8
