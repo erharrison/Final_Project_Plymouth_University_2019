@@ -82,8 +82,10 @@ HOW TO EXECUTE THIS APPLICATION
 7. After this has been entered the bubble map is generated, this has to be manually opened
 
 8. To view TensorBoard, after the map has been generated:
+  
   8.1 this command has to be run: tensorboard --logdir=path/to/log-directory
     (The directory path has be exhanged for the one the code points towards.)
+  
   8.2 Access localhost:6006 in your web browser, and voila!
 
 
