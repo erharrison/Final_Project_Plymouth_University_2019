@@ -14,7 +14,7 @@ HOW TO EXECUTE THIS APPLICATION
 - Jinja2	2.10.1
 - Keras	2.2.4
 - Keras-Applications	1.0.7
-- Keras-Processing	1.0.9
+- Keras-Preprocessing	1.0.9
 - MarkupSafe	1.1.1
 - PyYAML	5.1
 - Werkzeug	0.15.2
