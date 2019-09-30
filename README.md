@@ -29,7 +29,7 @@ HOW TO EXECUTE THIS APPLICATION
 - cycler	0.10.0
 - dill	0.2.9
 - ecos	2.0.7.post1
-- fastcache	
+- fastcache	1.1.0
 - future	0.17.1
 - folium	0.8.3
 - gast	0.2.2
